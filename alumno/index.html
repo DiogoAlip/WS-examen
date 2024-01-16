@@ -1,0 +1,35 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alumno Interface</title>
+  </head>
+  <ul id="list"></ul>
+  <button id="reload-button">reload</button>
+  <body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      let socket = io();
+
+      const button = document.getElementById("reload-button");
+      const list = document.getElementById("list");
+
+      socket.on("initialData", (newNotas) => {
+        upgradeList(newNotas);
+      });
+
+      socket.on("upgradeData", (newNotas) => {
+        upgradeList(newNotas);
+      });
+
+      button.addEventListener("click", (e) => {
+        socket.emit("initialData", (data) => updateDataList(data));
+      });
+
+      function upgradeList(list) {
+        const newList = document.getElementById("list");
+        newList.innerHTML = list.map((item) => `<li>${item}<li>`);
+      }
+    </script>
+  </body>
+</html>
